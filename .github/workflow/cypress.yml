@@ -23,17 +23,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set up Percy
-        run: |
-          curl -fsSL https://percy.io/percy-cli/install.sh | bash
-          echo "export PATH=$PATH:$HOME/.percy" >> $GITHUB_ENV
+      - name: Install Percy CLI
+        run: npm install --save-dev @percy/cli
 
       - name: Run Cypress tests with Percy
         run: |
-          npx cypress run --spec 'cypress/e2e/*.cy.ts'
-
-      - name: Run Percy snapshot
-        run: |
           npx percy exec -- npx cypress run --spec 'cypress/e2e/*.cy.ts'
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+
+      - name: Upload Percy snapshots
+        run: |
+          npx percy snapshot --url ${{ github.server_url }}/$GITHUB_REPOSITORY
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
