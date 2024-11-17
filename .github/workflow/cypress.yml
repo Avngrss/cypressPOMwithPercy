@@ -30,9 +30,7 @@ jobs:
 
       - name: Run Cypress tests with Percy
         run: |
-          npx cypress open --e2e   # Откроется UI тестирования для Cypress
-          # или, если хотите запустить без UI:
-          # npx cypress run --spec 'cypress/e2e/*.cy.ts'
+          npx cypress run --spec 'cypress/e2e/*.cy.ts'
 
       - name: Run Percy snapshot
         run: |
