@@ -1,4 +1,4 @@
-name: Percy Snapshot
+name: Cypress with Percy
 
 on:
   push:
@@ -9,25 +9,26 @@ on:
       - main
 
 jobs:
-  percy:
-    runs-on: ubuntu-latest
+  cypress:
+    runs-on: ubuntu-latest # используйте ubuntu-latest или windows-latest, в зависимости от ваших предпочтений
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18" # укажите нужную версию Node.js
 
       - name: Install dependencies
         run: npm install
 
-      - name: Set up Percy token
+      - name: Install Percy CLI
+        run: npm install --save-dev @percy/cli
+
+      - name: Run Cypress tests with Percy
+        run: |
+          npx percy exec -- npx cypress run --spec 'cypress/e2e/*.cy.ts'
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-        run: echo "PERCY_TOKEN=${{ secrets.PERCY_TOKEN }}" >> $GITHUB_ENV
-
-      - name: Run Cypress tests with Percy snapshot
-        run: npx cypress run
