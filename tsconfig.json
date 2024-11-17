@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "cypress/support",
+    "types": ["cypress", "@percy/cypress"]
+  },
+  "include": [
+    "cypress/**/*.ts"
+  ]
+}
