@@ -1,0 +1,41 @@
+name: Cypress with Percy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set up Percy
+        run: |
+          curl -fsSL https://percy.io/percy-cli/install.sh | bash
+          echo "export PATH=$PATH:$HOME/.percy" >> $GITHUB_ENV
+
+      - name: Run Cypress tests with Percy
+        run: |
+          npx cypress open --e2e   # Откроется UI тестирования для Cypress
+          # или, если хотите запустить без UI:
+          # npx cypress run --spec 'cypress/e2e/*.cy.ts'
+
+      - name: Run Percy snapshot
+        run: |
+          npx percy exec -- npx cypress run --spec 'cypress/e2e/*.cy.ts'
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
