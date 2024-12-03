@@ -28,7 +28,7 @@ export class loginPage {
           expect(responseBody.responseCode).to.eq(200);
           expect(responseBody.user.email).to.eq("testuser1731315476086@example.com");
         } else {
-          throw new Error('Ответ не содержит ожидаемых данных');
+          throw new Error('user not found');
         }
       });
     });
@@ -92,5 +92,5 @@ export class loginPage {
     cy.get('[data-qa="mobile_number"]').type(userData.mobile_number);
     cy.get('[data-qa="create-account"]').click();
     cy.contains("Account Created!");
-  }
+  }            
 }

@@ -11,6 +11,8 @@
     "types": ["cypress", "@percy/cypress"]
   },
   "include": [
-    "cypress/**/*.ts"
+    "cypress/**/*.ts",
+    "cypress/support/**/*.ts",
+    "cypress/pages/**/*.ts"
   ]
 }

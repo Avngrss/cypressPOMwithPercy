@@ -1,15 +1,18 @@
-import { loginPage } from '../support/pageObject/loginPage';
+import { loginPage } from '../../pageObject/loginPage';
 
 describe('login into application', () => {
   const LoginPage = new loginPage();
-  it.only('login with correct data', () => {
+
+  beforeEach(() => {
     LoginPage.visit()
+  })
+
+  it('login with correct data', () => {
     LoginPage.login()
     cy.percySnapshot()
   })
 
   it('login into application with incorrect data', () => {
-    LoginPage.visit()
     LoginPage.incorrectLogin("incorrectEmail@gmail.com", "incorrectPassword")
     cy.percySnapshot()
   })
