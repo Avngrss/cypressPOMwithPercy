@@ -1,4 +1,4 @@
-import { loginPage } from "../../support/pageObject/loginPage";
+import { loginPage } from "../../pageObject/loginPage";
 
 describe("Register user", () => {
   const LoginPage = new loginPage();
@@ -7,4 +7,10 @@ describe("Register user", () => {
     LoginPage.registerUser();
     cy.percySnapshot();
   });
+
+  it.only("Registration user with exsisted email", () => {
+    LoginPage.visit();
+    LoginPage.registerWithExistedEmail()
+    cy.percySnapshot()
+  })
 });

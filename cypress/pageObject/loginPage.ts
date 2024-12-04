@@ -92,5 +92,15 @@ export class loginPage {
     cy.get('[data-qa="mobile_number"]').type(userData.mobile_number);
     cy.get('[data-qa="create-account"]').click();
     cy.contains("Account Created!");
-  }            
+  }  
+  
+  public registerWithExistedEmail() {
+    cy.fixture('userData').as('userData').then((user) => {
+      cy.log(JSON.stringify(user));
+      cy.get('[data-qa="signup-name"]').type(user.username);
+      cy.get('[data-qa="signup-email"]').type(user.email);
+      cy.get('[data-qa="signup-button"]').click();
+      cy.contains('Email Address already exist!')
+    })
+  }
 }
