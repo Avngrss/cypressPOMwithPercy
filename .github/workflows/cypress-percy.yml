@@ -29,6 +29,6 @@ jobs:
 
       - name: Run Cypress tests with Percy
         run: |
-          npx percy exec -- npx cypress run --spec 'cypress/e2e/*.cy.ts'
+          npx percy exec -- npx cypress run --spec 'cypress/e2e/**/*.cy.ts'
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
