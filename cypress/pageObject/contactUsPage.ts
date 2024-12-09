@@ -14,4 +14,9 @@ export class ContactUsForm {
             cy.url().should('contain', 'https://automationexercise.com/')
         })    
     }
+
+    public verifyContactUsPage() {
+        cy.get('a').contains(' Contact us').click()
+        cy.url().should('contain', '/contact_us')
+    }
 }
