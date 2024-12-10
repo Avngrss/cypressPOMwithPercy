@@ -5,12 +5,14 @@ describe('Test for the Products Page', () => {
     const allProduct = new Allproduct()
     const LoginPage = new loginPage()
 
-    it('Products list is visible', () => {
+    beforeEach(() => {
         LoginPage.visit()
+    })
+
+    it.only('Products list is visible', () => {
         allProduct.AllProduct()
     })
-    it('Product detail', () => {
-        LoginPage.visit()
+    it('Get product detail', () => {
         allProduct.AllProduct()
         allProduct.getProductDetail()
     })
