@@ -2,7 +2,7 @@ export class ContactUsForm {
     public addFeedback() {
         cy.get('a').contains(' Contact us').click()
         cy.contains('Contact us').should('be.visible')
-        cy.fixture('userData').then((user) => {
+        cy.fixture('formData').then((user) => {
             cy.get('[data-qa="name"]').type(user.username)
             cy.get('[data-qa="email"]').type(user.email)
             cy.get('[data-qa="subject"]').type(user.subject)

@@ -1,0 +1,7 @@
+{
+    "username": "Test User",
+    "email": "testuser@gmail.com",
+    "subject": "test title",
+    "message": "test message",
+    "image": "cypress/fixtures/image.jpeg"
+}

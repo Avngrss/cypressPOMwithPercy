@@ -1,8 +1,5 @@
-{
+{  
     "email": "gosuUser1@gmail.com",
     "password": "password123",
-    "username": "Test User",
-    "subject": "test title",
-    "message": "test message",
-    "image": "cypress/fixtures/image.jpeg"
+    "username": "user"
 }
