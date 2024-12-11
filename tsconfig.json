@@ -13,6 +13,6 @@
   "include": [
     "cypress/**/*.ts",
     "cypress/support/**/*.ts",
-    "cypress/pages/**/*.ts"
+    "cypress/pageObject/**/*.ts"
   ]
 }
