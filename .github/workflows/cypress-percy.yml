@@ -36,14 +36,25 @@ jobs:
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
-      - name: Generate Mochawesome reports
+      - name: List files in results directory
         run: |
-          # Мержим все JSON отчеты в один
-          npx mochawesome-merge cypress/results/*.json > cypress/results/all-tests.json
-          # Генерация финального HTML отчета
-          npx mochawesome-report-generator cypress/results/all-tests.json --reportDir cypress/results --reportFilename final-report.html
+          echo "Listing files in cypress/results:"
+          ls -l cypress/results/
 
-          echo "HTML report has been generated!"
+      - name: Merge Mochawesome reports
+        run: |
+          # Фильтруем пустые файлы и только затем выполняем слияние
+          jsonFiles=$(find cypress/results/ -name "*.json" -not -empty)
+          if [ -z "$jsonFiles" ]; then
+            echo "No valid JSON reports found!"
+            exit 1
+          fi
+
+          npx mochawesome-merge $jsonFiles > cypress/results/all-tests.json
+
+      - name: Generate final HTML report
+        run: |
+          npx mochawesome-report-generator cypress/results/all-tests.json --reportDir cypress/results --reportFilename final-report.html
 
       - name: Remove unnecessary files (JSON and old HTML)
         run: |
