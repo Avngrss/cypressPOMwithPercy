@@ -67,3 +67,9 @@ jobs:
         with:
           name: mochawesome-final-report
           path: cypress/results/final-report.html
+
+      - name: Upload assets folder as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: mochawesome-assets
+          path: cypress/results/assets
