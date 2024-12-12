@@ -1,55 +1,56 @@
 import { defineConfig } from "cypress";
-const mochawesomeMerge = require('mochawesome-merge');  // Импортируем правильно
+const mochawesomeMerge = require('mochawesome-merge');
 const mochawesomeReportGenerator = require('mochawesome-report-generator');
 require('dotenv').config();
 
 export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
+      // Настройка Percy токена
       config.env.PERCY_TOKEN = process.env.PERCY_TOKEN;
+      
+      // Подключаем плагин Mochawesome Reporter
       require('cypress-mochawesome-reporter/plugin')(on);
 
-      on('after:run', async () => { 
+      // После запуска тестов, генерируем финальный отчет
+      on('after:run', async () => {
         try {
-          // Мержим отчеты в один JSON
-          const mergedJson = await mochawesomeMerge.merge({
-            files: ['cypress/results/*.json'],
-          });
-      
-          // Генерация HTML отчета
-          mochawesomeReportGenerator.create(mergedJson, {
-            reportDir: 'cypress/results',
-            reportFilename: 'final-report.html',
-          });
-      
-          console.log('HTML отчет успешно сгенерирован!');
-      
-          // Удаляем промежуточные файлы
+          // Получаем все файлы JSON отчетов
           const fs = require('fs');
           const path = require('path');
+          const resultsDir = path.join(__dirname, 'cypress', 'results');
           
-          // Удаляем все JSON файлы
-          const jsonFiles = fs.readdirSync('cypress/results').filter(file => file.endsWith('.json'));
-          jsonFiles.forEach(file => fs.unlinkSync(path.join('cypress/results', file)));
-      
-          // Удаляем старые HTML файлы
-          const htmlFiles = fs.readdirSync('cypress/results').filter(file => file.endsWith('.html') && file !== 'final-report.html');
-          htmlFiles.forEach(file => fs.unlinkSync(path.join('cypress/results', file)));
-      
-          console.log('Лишние файлы удалены.');
-      
+          // Проверяем, есть ли JSON файлы в папке результатов
+          const jsonFiles = fs.readdirSync(resultsDir).filter(file => file.endsWith('.json'));
+          if (jsonFiles.length === 0) {
+            console.log("Не найдено JSON отчетов!");
+            return;
+          }
+
+          // Мержим JSON файлы в один
+          const mergedJson = await mochawesomeMerge.merge({
+            files: jsonFiles.map(file => path.join(resultsDir, file)),
+          });
+
+          // Генерация финального HTML отчета
+          await mochawesomeReportGenerator.create(mergedJson, {
+            reportDir: resultsDir,
+            reportFilename: 'final-report.html',
+          });
+
+          console.log('HTML отчет успешно сгенерирован!');
+
         } catch (error) {
           console.error('Ошибка при слиянии отчетов:', error);
         }
       });
-      
 
       return config;
     },
-    baseUrl: 'https://automationexercise.com',
-    video: false, 
-    screenshotOnRunFailure: true, 
-    supportFile: 'cypress/support/commands.ts', 
+    baseUrl: 'https://automationexercise.com',  // Указываем базовый URL для тестов
+    video: false,  // Отключаем видео
+    screenshotOnRunFailure: true,  // Скриншоты при сбоях тестов
+    supportFile: 'cypress/support/commands.ts',  // Путь к файлу с поддерживающими командами
     reporter: 'mochawesome',  // Устанавливаем репортер Mochawesome
     reporterOptions: {
       reportDir: 'cypress/results',  // Папка для отчетов
@@ -61,6 +62,6 @@ export default defineConfig({
   },
   // Настройка для Percy
   env: {
-    PERCY_TOKEN: process.env.PERCY_TOKEN 
+    PERCY_TOKEN: process.env.PERCY_TOKEN,
   },
 });
