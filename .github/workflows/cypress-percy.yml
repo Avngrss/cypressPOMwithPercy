@@ -27,6 +27,9 @@ jobs:
       - name: Install Percy CLI
         run: npm install --save-dev @percy/cli
 
+      - name: Install Mochawesome Reporter
+        run: npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
+
       - name: Run Cypress tests with Percy
         run: |
           npx percy exec -- npx cypress run --spec 'cypress/e2e/**/*.cy.ts'
@@ -35,11 +38,23 @@ jobs:
 
       - name: Generate Mochawesome reports
         run: |
-          npx mochawesome-merge mochawesome-reports/*.json > mochawesome-reports/all-tests.json
-          npx mochawesome-report-generator mochawesome-reports/all-tests.json
+          # Мержим все JSON отчеты в один
+          npx mochawesome-merge cypress/results/*.json > cypress/results/all-tests.json
+          # Генерация финального HTML отчета
+          npx mochawesome-report-generator cypress/results/all-tests.json --reportDir cypress/results --reportFilename final-report.html
+
+          echo "HTML report has been generated!"
+
+      - name: Remove unnecessary files (JSON and old HTML)
+        run: |
+          # Удаляем все промежуточные JSON файлы
+          rm cypress/results/*.json
+          # Удаляем старые HTML файлы, кроме финального
+          rm cypress/results/*.html
+          mv cypress/results/final-report.html cypress/results/mochawesome-report.html
 
       - name: Upload Mochawesome report as artifact
         uses: actions/upload-artifact@v3
         with:
           name: mochawesome-report
-          path: mochawesome-reports/mochawesome-report.html
+          path: cypress/results/mochawesome-report.html
