@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18" # Укажите вашу нужную версию Node.js
+          node-version: "18"
 
       - name: Install dependencies
         run: npm install
@@ -33,18 +33,52 @@ jobs:
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
-      - name: Generate final Mochawesome report
+      # Проверяем, что JSON файлы созданы
+      - name: Check JSON files are created
         run: |
-          # Проверяем, что файлы JSON существуют перед слиянием
-          if [ -d "cypress/results" ] && [ "$(ls -A cypress/results)" ]; then
-            npx mochawesome-merge cypress/results/*.json > cypress/results/all-tests.json
-            npx mochawesome-report-generator cypress/results/all-tests.json --reportDir cypress/results --reportFilename final-report.html
+          echo "Проверка наличия JSON файлов..."
+          jsonFiles=$(find cypress/results -name "*.json" -not -empty)
+          if [ -z "$jsonFiles" ]; then
+            echo "Нет валидных JSON отчетов!"
+            exit 1
           else
+            echo "Найдены следующие JSON файлы:"
+            echo "$jsonFiles"
+          fi
+
+      # Ждем 10 секунд для завершения генерации отчетов
+      - name: Wait for reports to be created
+        run: |
+          echo "Ждем 10 секунд для завершения генерации отчетов"
+          sleep 10
+
+      # Мержим Mochawesome отчеты и генерируем финальный HTML отчет
+      - name: Merge Mochawesome reports and generate final HTML report
+        run: |
+          # Используем абсолютный путь для поиска JSON отчетов
+          jsonFiles=$(find $(pwd)/cypress/results -name "*.json" -not -empty)
+          if [ -z "$jsonFiles" ]; then
             echo "No valid JSON reports found!"
             exit 1
           fi
 
-      - name: Upload Mochawesome final report as artifact
+          # Мержим отчеты в один JSON файл
+          npx mochawesome-merge $jsonFiles > cypress/results/all-tests.json
+
+          # Генерация финального HTML отчета
+          npx mochawesome-report-generator cypress/results/all-tests.json --reportDir cypress/results --reportFilename final-report.html
+
+          echo "HTML отчет успешно сгенерирован!"
+
+      # Удаляем промежуточные файлы, но оставляем только final-report.html
+      - name: Clean up intermediate files
+        run: |
+          echo "Удаляем промежуточные файлы..."
+          rm -f cypress/results/*.json   # Удаляем все JSON файлы
+          rm -f cypress/results/*.html   # Удаляем все HTML файлы, кроме final-report.html
+          echo "Промежуточные файлы удалены."
+
+      - name: Upload final Mochawesome report as artifact
         uses: actions/upload-artifact@v3
         with:
           name: mochawesome-final-report
