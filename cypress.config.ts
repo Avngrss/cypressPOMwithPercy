@@ -11,9 +11,12 @@ export default defineConfig({
     video: false,                             
     screenshotOnRunFailure: true, 
     supportFile: 'cypress/support/commands.ts',
-    reporter: "cypress-allure-plugin",
+    reporter: "cypress-mochawesome-reporter",  
     reporterOptions: {
-    targetDir: "allure-results"
+      reportDir: "mochawesome-reports", 
+      overwrite: false,
+      html: true,   
+      json: true,   
     }
   },
 });

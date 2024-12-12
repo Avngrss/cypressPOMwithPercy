@@ -1,4 +1,4 @@
-name: Cypress с Percy и Allure
+name: Cypress with Percy and Mochawesome
 
 on:
   push:
@@ -13,36 +13,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout репозитория
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Настройка Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18" # Укажи свою нужную версию Node.js
+          node-version: "18"
 
-      - name: Установить зависимости
+      - name: Install dependencies
         run: npm install
 
-      - name: Установить Percy CLI
+      - name: Install Percy CLI
         run: npm install --save-dev @percy/cli
 
-      - name: Установить Allure Commandline
-        run: npm install --save-dev allure-commandline
-
-      - name: Запуск Cypress тестов с Percy
+      - name: Run Cypress tests with Percy
         run: |
           npx percy exec -- npx cypress run --spec 'cypress/e2e/**/*.cy.ts'
         env:
-          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }} # Убедись, что токен Percy добавлен в Secrets
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
-      - name: Генерация отчёта Allure
+      - name: Generate Mochawesome reports
         run: |
-          npx allure generate allure-results --clean
-          npx allure open allure-report
+          npx mochawesome-merge mochawesome-reports/*.json > mochawesome-reports/all-tests.json
+          npx mochawesome-report-generator mochawesome-reports/all-tests.json
 
-      - name: Загрузить отчет Allure как артефакт
+      - name: Upload Mochawesome report as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: allure-report
-          path: allure-report
+          name: mochawesome-report
+          path: mochawesome-reports/mochawesome-report.html
