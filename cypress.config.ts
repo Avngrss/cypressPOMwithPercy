@@ -10,6 +10,10 @@ export default defineConfig({
     baseUrl: 'https://automationexercise.com', 
     video: false,                             
     screenshotOnRunFailure: true, 
-    supportFile: 'cypress/support/commands.ts'
+    supportFile: 'cypress/support/commands.ts',
+    reporter: "cypress-allure-plugin",
+    reporterOptions: {
+    targetDir: "allure-results"
+    }
   },
 });

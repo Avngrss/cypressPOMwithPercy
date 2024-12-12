@@ -1,4 +1,4 @@
-name: Cypress with Percy
+name: Cypress с Percy и Allure
 
 on:
   push:
@@ -10,25 +10,39 @@ on:
 
 jobs:
   cypress:
-    runs-on: ubuntu-latest # используйте ubuntu-latest или windows-latest, в зависимости от ваших предпочтений
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout репозитория
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Настройка Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18" # укажите нужную версию Node.js
+          node-version: "18" # Укажи свою нужную версию Node.js
 
-      - name: Install dependencies
+      - name: Установить зависимости
         run: npm install
 
-      - name: Install Percy CLI
+      - name: Установить Percy CLI
         run: npm install --save-dev @percy/cli
 
-      - name: Run Cypress tests with Percy
+      - name: Установить Allure Commandline
+        run: npm install --save-dev allure-commandline
+
+      - name: Запуск Cypress тестов с Percy
         run: |
           npx percy exec -- npx cypress run --spec 'cypress/e2e/**/*.cy.ts'
         env:
-          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }} # Убедись, что токен Percy добавлен в Secrets
+
+      - name: Генерация отчёта Allure
+        run: |
+          npx allure generate allure-results --clean
+          npx allure open allure-report
+
+      - name: Загрузить отчет Allure как артефакт
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: allure-report

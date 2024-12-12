@@ -1,4 +1,5 @@
 import "@percy/cypress";
+import '@shelex/cypress-allure-plugin';
 
 import { loginPage } from '../pageObject/loginPage';
 declare global {
