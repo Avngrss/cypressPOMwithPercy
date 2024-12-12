@@ -33,7 +33,6 @@ jobs:
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
-      # Проверяем, что JSON файлы созданы
       - name: Check JSON files are created
         run: |
           echo "Проверка наличия JSON файлов..."
@@ -46,37 +45,22 @@ jobs:
             echo "$jsonFiles"
           fi
 
-      # Ждем 10 секунд для завершения генерации отчетов
-      - name: Wait for reports to be created
-        run: |
-          echo "Ждем 10 секунд для завершения генерации отчетов"
-          sleep 10
-
-      # Мержим Mochawesome отчеты и генерируем финальный HTML отчет
       - name: Merge Mochawesome reports and generate final HTML report
         run: |
-          # Используем абсолютный путь для поиска JSON отчетов
-          jsonFiles=$(find $(pwd)/cypress/results -name "*.json" -not -empty)
+          # Проверка наличия JSON файлов в cypress/results
+          jsonFiles=$(find cypress/results -name "*.json" -not -empty)
           if [ -z "$jsonFiles" ]; then
             echo "No valid JSON reports found!"
             exit 1
           fi
 
-          # Мержим отчеты в один JSON файл
+          # Мержим JSON файлы в один
           npx mochawesome-merge $jsonFiles > cypress/results/all-tests.json
 
           # Генерация финального HTML отчета
           npx mochawesome-report-generator cypress/results/all-tests.json --reportDir cypress/results --reportFilename final-report.html
 
           echo "HTML отчет успешно сгенерирован!"
-
-      # Удаляем промежуточные файлы, но оставляем только final-report.html
-      - name: Clean up intermediate files
-        run: |
-          echo "Удаляем промежуточные файлы..."
-          rm -f cypress/results/*.json   # Удаляем все JSON файлы
-          rm -f cypress/results/*.html   # Удаляем все HTML файлы, кроме final-report.html
-          echo "Промежуточные файлы удалены."
 
       - name: Upload final Mochawesome report as artifact
         uses: actions/upload-artifact@v3
