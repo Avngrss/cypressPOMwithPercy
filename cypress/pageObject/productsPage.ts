@@ -1,4 +1,8 @@
-export default class ProductPage {
+export class ProductPage {
+
+    public visitProductsPage() {
+        cy.visit('/products')
+    }
 
     public AllProduct() {
         cy.get('a').contains('Products').click()
@@ -28,7 +32,17 @@ export default class ProductPage {
         cy.get(':nth-child(8) > b').should('be.visible')
     }
 
-    public searchProduct() {
-        
+    public searchProduct(product: string) {
+        cy.get('#search_product').type(product)
+        cy.get('#submit_search').click()
+        cy.get('.features_items').should('be.visible')
+        cy.get('h2').should('be.visible').should('contain.text', 'Searched Products')
+        cy.url().should('contain', '/products?search=blue')
+    }
+
+    public searchNotExistedProduct(product: string) {
+        cy.get('#search_product').type(product)
+        cy.get('#submit_search').click()
+        cy.get('.features_items').should('not.have.descendants', '.single-products')
     }
 }

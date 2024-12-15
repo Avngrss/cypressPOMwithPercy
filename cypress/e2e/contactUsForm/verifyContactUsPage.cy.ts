@@ -1,11 +1,16 @@
 import { ContactUsForm } from '../../pageObject/contactUsPage'
-import { loginPage } from '../../pageObject/loginPage';
+import { LoginPage } from '../../pageObject/loginPage';
+import { HomePage } from '../../pageObject/homePage';
 
-describe.only("Contact us form", () => {
-    const contactUsPage = new ContactUsForm()
-    const LoginPage = new loginPage();
+describe("Contact us form", () => {
+    const contactUsPage = new ContactUsForm
+    const loginPage = new LoginPage
+    const homePage = new HomePage
+
+    
     it("Page 'Contact Us' is visible", () => {
-        LoginPage.visit()
+        homePage.visitHomePage()
+        loginPage.visit()
         contactUsPage.verifyContactUsPage()
         cy.percySnapshot()
     })

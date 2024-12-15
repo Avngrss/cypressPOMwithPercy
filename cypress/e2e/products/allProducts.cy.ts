@@ -1,19 +1,22 @@
-import Allproduct from '../../pageObject/productsPage'
-import { loginPage } from '../../pageObject/loginPage'
+import { ProductPage } from '../../pageObject/productsPage'
+import { LoginPage } from '../../pageObject/loginPage'
+import { HomePage } from '../../pageObject/homePage'
 
 describe('Test for the Products Page', () => {
-    const allProduct = new Allproduct()
-    const LoginPage = new loginPage()
+    const productPage = new ProductPage
+    const loginPage = new LoginPage
+    const homePage = new HomePage
 
     beforeEach(() => {
-        LoginPage.visit()
+        homePage.visitHomePage()
+        loginPage.visit()
     })
 
-    it.only('Products list is visible', () => {
-        allProduct.AllProduct()
+    it('Products list is visible', () => {
+        productPage.AllProduct()
     })
     it('Get product detail', () => {
-        allProduct.AllProduct()
-        allProduct.getProductDetail()
+        productPage.AllProduct()
+        productPage.getProductDetail()
     })
 })

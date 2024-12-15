@@ -1,16 +1,22 @@
-import { loginPage } from "../../pageObject/loginPage";
+import { LoginPage } from "../../pageObject/loginPage";
+import { HomePage } from "../../pageObject/homePage";
 
 describe("Register user", () => {
-  const LoginPage = new loginPage();
+  const loginPage = new LoginPage();
+  const homePage = new HomePage();
+
+  beforeEach(() => {
+    homePage.visitHomePage();
+    loginPage.visit();
+  });
+
   it("Register user with correct data", () => {
-    LoginPage.visit();
-    LoginPage.registerUser();
+    loginPage.registerUser();
     cy.percySnapshot();
   });
 
   it.only("Registration user with exsisted email", () => {
-    LoginPage.visit();
-    LoginPage.registerWithExistedEmail()
-    cy.percySnapshot()
-  })
+    loginPage.registerWithExistedEmail();
+    cy.percySnapshot();
+  });
 });

@@ -1,5 +1,5 @@
 import '../../support/commands'
-import  HomePage  from '../../pageObject/homePage'
+import { HomePage }   from '../../pageObject/homePage'
 
 describe('Logout from the app', () => {
     const homePage = new HomePage

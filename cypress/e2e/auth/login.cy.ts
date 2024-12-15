@@ -1,19 +1,22 @@
-import { loginPage } from '../../pageObject/loginPage';
+import { LoginPage } from '../../pageObject/loginPage';
+import { HomePage }  from '../../pageObject/homePage';
 
 describe('login into application', () => {
-  const LoginPage = new loginPage();
+  const loginPage = new LoginPage();
+  const homePage = new HomePage()
 
   beforeEach(() => {
-    LoginPage.visit()
+    homePage.visitHomePage()
+    loginPage.visit()
   })
 
   it('login with correct data', () => {
-    LoginPage.login()
+    loginPage.login()
     cy.percySnapshot()
   })
 
   it('login into application with incorrect data', () => {
-    LoginPage.incorrectLogin("incorrectEmail@gmail.com", "incorrectPassword")
+    loginPage.incorrectLogin("incorrectEmail@gmail.com", "incorrectPassword")
     cy.percySnapshot()
   })
 })

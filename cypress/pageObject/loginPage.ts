@@ -1,10 +1,10 @@
-export class loginPage {
+export class LoginPage {
   email: string = '[data-qa="login-email"]';
   password: string = '[data-qa="login-password"]';
   loginBtn: string = '[data-qa="login-button"]';
 
   public visit() {
-    cy.visit("/login");
+    cy.get('a').contains('Signup / Login').click()
   }
 
   public login() {

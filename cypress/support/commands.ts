@@ -1,7 +1,8 @@
 import "@percy/cypress";
 
 
-import { loginPage } from '../pageObject/loginPage';
+import { LoginPage } from '../pageObject/loginPage';
+import { HomePage } from "../pageObject/homePage";
 declare global {
     namespace Cypress {
       interface Chainable {
@@ -11,7 +12,9 @@ declare global {
   }
   
   Cypress.Commands.add('loginUser', () => {
-    const loginPageInstance = new loginPage();
+    const loginPageInstance = new LoginPage
+    const homePage = new HomePage
+    homePage.visitHomePage()
     loginPageInstance.visit();
     loginPageInstance.login();
   });
