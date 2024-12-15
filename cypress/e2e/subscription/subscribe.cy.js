@@ -13,7 +13,7 @@ describe("Subscribe block", () => {
     homePage.SubscriptionInHomePage("testuser@gmail.com");
   });
 
-  it.only("Subscribe in the cart page", () => {
+  it("Subscribe in the cart page", () => {
     cartPage.SubscriptionIncartPage("user22@gmail.com");
   });
 });

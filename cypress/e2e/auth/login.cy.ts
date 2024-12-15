@@ -2,8 +2,8 @@ import { LoginPage } from '../../pageObject/loginPage';
 import { HomePage }  from '../../pageObject/homePage';
 
 describe('login into application', () => {
-  const loginPage = new LoginPage();
-  const homePage = new HomePage()
+  const loginPage = new LoginPage
+  const homePage = new HomePage
 
   beforeEach(() => {
     homePage.visitHomePage()
