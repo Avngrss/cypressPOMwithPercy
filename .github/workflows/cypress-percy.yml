@@ -74,7 +74,7 @@ jobs:
           mv cypress/results/assets cypress/results/final_report/
 
       - name: Upload final report and assets as a single artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mochawesome-report
-          path: cypress/results/final_report
+          path: cypress/results/final_report/
