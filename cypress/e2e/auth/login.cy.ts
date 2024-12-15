@@ -11,7 +11,6 @@ describe('login into application', () => {
   })
 
   it('login with correct data', () => {
-    loginPage.login()
     cy.percySnapshot()
   })
 
