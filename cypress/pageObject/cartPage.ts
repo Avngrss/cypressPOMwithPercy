@@ -38,6 +38,7 @@ export class CartPage {
 
     public deleteProduct() {
         cy.get('.cart_quantity_delete').click()
-        cy.contains('empty')
+        cy.get('tbody tr').should('have.length', 0);
+        cy.contains('Cart is empty!')
     }
 }
