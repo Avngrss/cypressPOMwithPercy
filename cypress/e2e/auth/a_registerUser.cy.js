@@ -15,7 +15,7 @@ describe("Register user", () => {
     cy.percySnapshot();
   });
 
-  it.only("Registration user with exsisted email", () => {
+  it("Registration user with exsisted email", () => {
     loginPage.registerWithExistedEmail();
     cy.percySnapshot();
   });

@@ -107,4 +107,9 @@ export class LoginPage {
         cy.contains("Email Address already exist!");
       });
   }
+
+  public deleteAccount() {
+    cy.get('a').contains('Delete account').click()
+    cy.get('h2.title').should('be.visible').and('have.text', 'Account Deleted!')
+  }
 }

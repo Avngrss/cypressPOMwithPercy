@@ -26,5 +26,6 @@ describe.only("ChecOut the order", () => {
         productsPage.visitProductsPage()
         cartPage.addProductInCart()
         cartPage.checkOutWithLogin('My card', 8888-9999-3543-6666, 999, 10, 2025)
+        cartPage.visitCartPage()
     })
 })

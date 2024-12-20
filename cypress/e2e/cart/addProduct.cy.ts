@@ -3,7 +3,7 @@ import { LoginPage } from "../../pageObject/loginPage";
 import { CartPage } from "../../pageObject/cartPage";
 import { ProductPage } from "../../pageObject/productsPage";
 
-describe("Should add product into cart", () => {
+describe.only("Should add product into cart", () => {
     const homePage = new HomePage
     const loginPage = new LoginPage
     const cartPage = new CartPage
@@ -28,5 +28,6 @@ describe("Should add product into cart", () => {
 
     it("Add a recommended item", () => {
         productsPage.addRecommendedItem()
+        cartPage.deleteProduct()
     })
 });
