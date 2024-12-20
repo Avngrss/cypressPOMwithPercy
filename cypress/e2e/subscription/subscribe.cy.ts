@@ -1,7 +1,7 @@
 import { HomePage } from "../../pageObject/homePage";
 import { CartPage } from "../../pageObject/cartPage";
 
-describe("Subscribe block", () => {
+describe("Should verify Subscribe block", () => {
   const homePage = new HomePage();
   const cartPage = new CartPage();
 

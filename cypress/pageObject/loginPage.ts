@@ -4,7 +4,7 @@ export class LoginPage {
   loginBtn: string = '[data-qa="login-button"]';
 
   public visit() {
-    cy.get('a').contains('Signup / Login').click()
+    cy.get("a").contains("Signup / Login").click();
   }
 
   public login() {
@@ -26,9 +26,11 @@ export class LoginPage {
         const responseBody = JSON.parse(response.body);
         if (responseBody && responseBody.responseCode && responseBody.user) {
           expect(responseBody.responseCode).to.eq(200);
-          expect(responseBody.user.email).to.eq("testuser1731315476086@example.com");
+          expect(responseBody.user.email).to.eq(
+            "testuser1731315476086@example.com"
+          );
         } else {
-          throw new Error('user not found');
+          throw new Error("user not found");
         }
       });
     });
@@ -92,15 +94,17 @@ export class LoginPage {
     cy.get('[data-qa="mobile_number"]').type(userData.mobile_number);
     cy.get('[data-qa="create-account"]').click();
     cy.contains("Account Created!");
-  }  
-  
+  }
+
   public registerWithExistedEmail() {
-    cy.fixture('userData').as('userData').then((user) => {
-      cy.log(JSON.stringify(user));
-      cy.get('[data-qa="signup-name"]').type(user.username);
-      cy.get('[data-qa="signup-email"]').type(user.email);
-      cy.get('[data-qa="signup-button"]').click();
-      cy.contains('Email Address already exist!')
-    })
+    cy.fixture("userData")
+      .as("userData")
+      .then((user) => {
+        cy.log(JSON.stringify(user));
+        cy.get('[data-qa="signup-name"]').type(user.username);
+        cy.get('[data-qa="signup-email"]').type(user.email);
+        cy.get('[data-qa="signup-button"]').click();
+        cy.contains("Email Address already exist!");
+      });
   }
 }
