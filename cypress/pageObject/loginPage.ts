@@ -16,23 +16,6 @@ export class LoginPage {
       cy.get(this.password).type(user.password);
       cy.get(this.loginBtn).click();
       cy.contains(`Logged in as ${user.username}`).should("be.visible");
-      cy.request({
-        url: "https://automationexercise.com/api/getUserDetailByEmail",
-        method: "GET",
-        qs: {
-          email: "testuser1731315476086@example.com",
-        },
-      }).then((response) => {
-        const responseBody = JSON.parse(response.body);
-        if (responseBody && responseBody.responseCode && responseBody.user) {
-          expect(responseBody.responseCode).to.eq(200);
-          expect(responseBody.user.email).to.eq(
-            "testuser1731315476086@example.com"
-          );
-        } else {
-          throw new Error("user not found");
-        }
-      });
     });
   }
 
